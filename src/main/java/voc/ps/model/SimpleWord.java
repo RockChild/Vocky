@@ -14,6 +14,17 @@ public class SimpleWord {
     private int id;
     private String word;
 
+    public DependentWord getDependentWord() {
+        return dependentWord;
+    }
+
+    public void setDependentWord(DependentWord dependentWord) {
+        this.dependentWord = dependentWord;
+    }
+
+    @OneToOne(fetch = FetchType.LAZY, mappedBy = "word")
+    private DependentWord dependentWord;
+
     public int getId() {
         return id;
     }

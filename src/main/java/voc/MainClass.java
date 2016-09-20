@@ -3,7 +3,9 @@ package voc;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 import org.springframework.context.support.AbstractApplicationContext;
 import voc.ps.configuration.AppConfig;
+import voc.ps.model.DependentWord;
 import voc.ps.model.SimpleWord;
+import voc.ps.service.DependentWordService;
 import voc.ps.service.WordService;
 
 import java.util.List;
@@ -17,6 +19,7 @@ public class MainClass {
     {
         AbstractApplicationContext context = new AnnotationConfigApplicationContext(AppConfig.class);
         WordService ws = (WordService) context.getBean("wordService");
+        DependentWordService dws = (DependentWordService) context.getBean("dependentWordService");
 
         //save
         SimpleWord word1 = new SimpleWord();
@@ -39,27 +42,21 @@ public class MainClass {
         wordX.setWord("the very first word");
         ws.updateWord(wordX);
 
+        //dependentWord - save
+        DependentWord dependentWord1 = new DependentWord();
+        dependentWord1.setWord(wordX);
+        dws.saveWord(dependentWord1);
+        //save
+        DependentWord dependentWord2 = new DependentWord();
+        dependentWord2.setWord(ws.findAllWords().get(2));
+        dws.saveWord(dependentWord2);
+
+        //list all
+        System.out.println(dws.findAllWords());
 
         ws.deleteWordById(allSimpleWords.get(1).getId());
         allSimpleWords = ws.findAllWords();
         System.out.println(allSimpleWords);
         context.close();
     }
-//    {
-//        SessionFactory sessionFactory;
-//        sessionFactory = new Configuration()
-//                .configure() // configures settings from hibernate.cfg.xml
-//                .buildSessionFactory();
-//
-//        Session session = sessionFactory.openSession();
-//
-//        Transaction tx = session.beginTransaction();
-//        Task task = new Task();
-//        task.setId(new Long(1));
-//        task.setName("Hello world task");
-//        task.setDescription("Hello world task description");
-//        session.save(task);
-//        tx.commit();
-//        session.close();
-//    }
 }
