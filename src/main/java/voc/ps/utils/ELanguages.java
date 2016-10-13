@@ -7,7 +7,7 @@ public enum ELanguages {
     ENGLISH("English"),
     POLISH("Polish");
 
-    private String language;
+    private final String language;
 
     ELanguages(String language) {
         this.language = language;

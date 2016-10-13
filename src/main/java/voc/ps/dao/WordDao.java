@@ -6,9 +6,9 @@ import java.util.List;
 
 public interface WordDAO {
 
-	public void addWord(Word p);
-	public void updateWord(Word p);
-	public List<Word> listWords();
-	public Word getWordById(int id);
-	public void removeWord(int id);
+	void addWord(Word p);
+	void updateWord(Word p);
+	List<Word> listWords();
+	Word getWordById(int id);
+	void removeWord(int id);
 }

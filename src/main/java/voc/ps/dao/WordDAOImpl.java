@@ -56,7 +56,7 @@ public class WordDAOImpl implements WordDAO {
 	@Override
 	public void removeWord(int id) {
 		Session session = this.sessionFactory.getCurrentSession();
-		Word p = (Word) session.load(Word.class, new Integer(id));
+		Word p = (Word) session.load(Word.class, id);
 		if(null != p){
 			session.delete(p);
 		}

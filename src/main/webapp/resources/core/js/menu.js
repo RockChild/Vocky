@@ -1,23 +1,23 @@
-function correctMenu(id) {
+function correctMenu2(id) {
+        setLangSuffix2();
+        setCorrectLinksToMenuOptions2();
     if (document.body.contains(document.getElementById(id))) {
-        setCorrectLinksToMenuOptions();
-        activateMenuOption(id);
-        setLangSuffix();
+        activateMenuOption2(id);
     }
     return false;
 }
 
-function activateMenuOption(id) {
+function activateMenuOption2(id) {
     document.getElementById(id).setAttribute("class", "active");
     document.querySelectorAll('#'+id+' a')[0].removeAttribute("href");
 }
 
-function hideMenuBar() {
+function hideMenuBar2() {
     document.getElementById("menuBar").style.visibility = "hidden";
     document.getElementById("collapseButton").style.visibility = "hidden";
 }
 
-function setCorrectLinksToMenuOptions() {
+function setCorrectLinksToMenuOptions2() {
     document.getElementById("linkHome").setAttribute("href", "home");
     document.getElementById("linkWeek").setAttribute("href", "week");
     document.getElementById("linkMonth").setAttribute("href", "month");
@@ -25,7 +25,7 @@ function setCorrectLinksToMenuOptions() {
     document.getElementById("linkAdd").setAttribute("href", "add");
 }
 
-function getLanguageFromCookie() {
+function getLanguageFromCookie2() {
     var name = "language=";
     var ca = document.cookie.split(';');
     for(var i = 0; i < ca.length; i++) {
@@ -40,9 +40,9 @@ function getLanguageFromCookie() {
     return "";
 }
 
-function setLangSuffix() {
-    var language = getLanguageFromCookie();
-    var short = "";
+function setLangSuffix2() {
+    var language = getLanguageFromCookie2();
+    var short = '';
     if (language == "English") {
         short = " EN";
     } else if (language == "Polish") {

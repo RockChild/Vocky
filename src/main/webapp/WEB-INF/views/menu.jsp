@@ -2,20 +2,21 @@
 <%@ page import="java.util.*" %>
 
 <spring:url value="/resources/core/css/bootstrap.min.css" var="bootstrapCss"/>
+<spring:url value="/resources/core/css/style.css" var="styleCss"/>
+<spring:url value="/resources/core/js/jquery.min.js" var="jquery"/>
 <spring:url value="/resources/core/js/bootstrap.min.js" var="bootstrapJs"/>
 <spring:url value="/resources/core/js/menu.js" var="menuJs"/>
-<spring:url value="/resources/core/js/jquery.min.js" var="jquery"/>
-<spring:url value="/resources/core/css/style.css" var="styleCss"/>
 
 <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
 <meta http-equiv="x-ua-compatible" content="ie=edge">
-<script src="${menuJs}"/>
-<script src="${bootstrapJs}"></script>
-<script src="${jquery}"></script>
 
-<link href="${styleCss}" rel="stylesheet" />
-<link href="${bootstrapCss}" rel="stylesheet" />
+
 <head>
+    <link href="${styleCss}" rel="stylesheet" />
+    <link href="${bootstrapCss}" rel="stylesheet" />
+    <script src="${jquery}"></script>
+    <script src="${bootstrapJs}"></script>
+    <script src="${menuJs}"></script>
     <title>Vocky</title>
 </head>
 <nav class="navbar navbar-inverse navbar-fixed-top">
