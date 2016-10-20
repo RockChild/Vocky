@@ -12,9 +12,9 @@ import java.util.List;
 /**
  * Created by pavlo.shtefanesku on 10/20/2016.
  */
-public class MonthWordDAOImpl implements TempWordDAO {
+public class MonthWordDAOImpl implements MonthWordDAO {
 
-    private static final Logger logger = LoggerFactory.getLogger(WeekWordDAOImpl.class);
+    private static final Logger logger = LoggerFactory.getLogger(MonthWordDAOImpl.class);
     private SessionFactory sessionFactory;
 
     public void setSessionFactory(SessionFactory sf){

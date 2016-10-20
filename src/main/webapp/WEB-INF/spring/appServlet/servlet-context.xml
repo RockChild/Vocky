@@ -42,6 +42,7 @@
 			<beans:list>
 				<beans:value>voc.ps.model.Word</beans:value>
 				<beans:value>voc.ps.model.WeekWord</beans:value>
+				<beans:value>voc.ps.model.MonthWord</beans:value>
 			</beans:list>
 		</beans:property>
 		<beans:property name="hibernateProperties">
@@ -57,16 +58,22 @@
 	<beans:bean id="wordDAO" class="voc.ps.dao.WordDAOImpl">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="wordService" class="voc.ps.service.WordServiceImpl">
-        <beans:property name="wordDAO" ref="wordDAO"/>
-	</beans:bean>
-
-	<beans:bean id="tempWordDAO" class="voc.ps.dao.WeekWordDAOImpl">
+	<beans:bean id="weekWordDAO" class="voc.ps.dao.WeekWordDAOImpl">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
-	<beans:bean id="weekWordService" class="voc.ps.service.WeekWordServiceImpl">
-		<beans:property name="tempWordDAO" ref="tempWordDAO"/>
+	<beans:bean id="monthWordDAO" class="voc.ps.dao.MonthWordDAOImpl">
+		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
+	<beans:bean id="wordService" class="voc.ps.service.WordServiceImpl">
+		<beans:property name="wordDAO" ref="wordDAO"/>
+	</beans:bean>
+	<beans:bean id="weekWordService" class="voc.ps.service.WeekWordServiceImpl">
+		<beans:property name="weekWordDAO" ref="weekWordDAO"/>
+	</beans:bean>
+	<beans:bean id="monthWordService" class="voc.ps.service.MonthWordServiceImpl">
+		<beans:property name="monthWordDAO" ref="monthWordDAO"/>
+	</beans:bean>
+
 	<context:component-scan base-package="voc.ps" />
 	
 	<tx:annotation-driven transaction-manager="transactionManager"/>

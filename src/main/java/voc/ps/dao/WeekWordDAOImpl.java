@@ -12,7 +12,7 @@ import java.util.List;
 /**
  * Created by pavlo.shtefanesku on 9/22/2016.
  */
-public class WeekWordDAOImpl implements TempWordDAO {
+public class WeekWordDAOImpl implements WeekWordDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(WeekWordDAOImpl.class);
     private SessionFactory sessionFactory;

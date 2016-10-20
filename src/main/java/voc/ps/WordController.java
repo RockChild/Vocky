@@ -6,6 +6,7 @@ import org.springframework.validation.BindingResult;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
 import voc.ps.model.AbstractWord;
+import voc.ps.model.MonthWord;
 import voc.ps.model.WeekWord;
 import voc.ps.model.Word;
 
@@ -19,7 +20,7 @@ public class WordController extends AbstractController{
         final Word word = wordService.listWords().get(0);
         model.addAttribute("word", new Word());
         model.addAttribute("listWords", this.wordService.listWords());
-        model.addAttribute("listWords", weekWordService.listWeekWords());
+        model.addAttribute("listWords", weekWordService.listWords());
         return "word";
     }
 
@@ -89,7 +90,7 @@ public class WordController extends AbstractController{
                     if (word.isInProgress()) {
                         addWeekWord(word);
                     } else {
-                        weekWordService.removeWeekWord(weekWordService.getWeekWordByWordId(word.getId()).getId());
+                        weekWordService.removeWord(weekWordService.getWeekWordByWordId(word.getId()).getId());
                     }
                 }
                 wordService.updateWord(word);
@@ -104,7 +105,7 @@ public class WordController extends AbstractController{
             int id = Integer.parseInt(idText);
             AbstractWord weekWord = weekWordService.getWeekWordByWordId(id);
             if (weekWord != null) {
-                weekWordService.removeWeekWord(weekWord.getId());
+                weekWordService.removeWord(weekWord.getId());
             }
             if (null!=wordService.getWordById(id)) {
                 wordService.removeWord(id);
@@ -118,7 +119,12 @@ public class WordController extends AbstractController{
     private void addWeekWord(Word word) {
         final WeekWord weekWord = new WeekWord(word);
         weekWord.setCurrentDate();
-        weekWordService.addWeekWord(weekWord);
+        weekWordService.addWord(weekWord);
+
+        final MonthWord monthWord = new MonthWord(word);
+        monthWord.setCurrentDate();
+        monthWordService.addWord(monthWord);
+
     }
 
     private boolean isWordValid(Word word, BindingResult result, ModelAndView modelAndView) {

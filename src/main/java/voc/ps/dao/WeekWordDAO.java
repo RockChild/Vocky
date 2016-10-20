@@ -6,7 +6,7 @@ import java.util.List;
 /**
  * Created by pavlo.shtefanesku on 9/22/2016.
  */
-public interface TempWordDAO {
+public interface WeekWordDAO {
     void addWord(AbstractWord word);
     void updateWord(AbstractWord weekWord);
     List<AbstractWord> listWords();

@@ -92,7 +92,7 @@ public class WelcomeController extends AbstractController{
         ModelAndView modelAndView = new ModelAndView("words");
 //        checkDatesForWeekWords();
         modelAndView.addObject(OPENED_PAGE, OPTION_WEEK);
-        modelAndView.addObject("listWords", weekWordService.listWeekWords());
+        modelAndView.addObject("listWords", weekWordService.listWords());
         return modelAndView;
     }
 
