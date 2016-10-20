@@ -1,34 +1,17 @@
 package voc.ps;
 
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
-import org.springframework.web.bind.annotation.ModelAttribute;
-import org.springframework.web.bind.annotation.PathVariable;
-import org.springframework.web.bind.annotation.RequestMapping;
-import org.springframework.web.bind.annotation.RequestMethod;
+import org.springframework.validation.BindingResult;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.web.servlet.ModelAndView;
+import voc.ps.model.AbstractWord;
+import voc.ps.model.WeekWord;
 import voc.ps.model.Word;
-import voc.ps.service.WeekWordService;
-import voc.ps.service.WordService;
 
 @Controller
-public class WordController {
+public class WordController extends AbstractController{
 
-    private WordService wordService;
-    private WeekWordService weekWordService;
-
-    @Autowired()
-    @Qualifier(value = "weekWordService")
-    public void setWeekWordService(WeekWordService rs) {
-        this.weekWordService = rs;
-    }
-
-    @Autowired()
-    @Qualifier(value = "wordService")
-    public void setWordService(WordService ps) {
-        this.wordService = ps;
-    }
 
     @SuppressWarnings("SameReturnValue")
     @RequestMapping(value = "/words", method = RequestMethod.GET)
@@ -36,13 +19,13 @@ public class WordController {
         final Word word = wordService.listWords().get(0);
         model.addAttribute("word", new Word());
         model.addAttribute("listWords", this.wordService.listWords());
-        model.addAttribute("listWeekWords", weekWordService.listWeekWords());
+        model.addAttribute("listWords", weekWordService.listWeekWords());
         return "word";
     }
 
     //For add and update word both
-    @RequestMapping(value = "/word/add", method = RequestMethod.POST)
-    public String addWord(@ModelAttribute("word") Word p) {
+    @RequestMapping(value = "/word/addd", method = RequestMethod.POST)
+    public String addWordOld(@ModelAttribute("word") Word p) {
 
         if (p.getId() == 0) {
             //new word, add it
@@ -56,17 +39,96 @@ public class WordController {
 
     }
 
-    @RequestMapping("/remove/{id}")
-    public String removeWord(@PathVariable("id") int id) {
-
-        this.wordService.removeWord(id);
-        return "redirect:/words";
-    }
-
     @RequestMapping("/edit/{id}")
-    public String editWord(@PathVariable("id") int id, Model model) {
-        model.addAttribute("word", this.wordService.getWordById(id));
-        model.addAttribute("listWords", this.wordService.listWords());
-        return "word";
+    public String editWordOld(@PathVariable("id") int id, Model model) {
+        model.addAttribute("word", wordService.getWordById(id));
+        model.addAttribute("listWords", wordService.listWords());
+        return "vocabulary";
     }
+
+    @RequestMapping("/fucking/bullshit")
+    public ModelAndView fuck() {
+        ModelAndView modelAndView = new ModelAndView(VOCABULARY);
+        return modelAndView;
+    }
+
+    @RequestMapping("/word/add")
+    public ModelAndView fuck(@ModelAttribute("word") Word word,
+                             @RequestParam(value = "addAsWeekWord", required = false) Boolean setWordAsWeekWord,
+                             BindingResult result) {
+
+        ModelAndView modelAndView = new ModelAndView(VOCABULARY);
+        if (isWordValid(word, result, modelAndView)) {
+            if (wordService.wordExist(word)) {
+                modelAndView.addObject(ERROR,
+                        String.format("The word %s already exist. Please add another one or update existing", word.getWord()));
+            } else {
+                wordService.addWord(word);
+                if (null != setWordAsWeekWord && setWordAsWeekWord) {
+                    word.setInProgress(true);
+                    wordService.updateWord(word);
+                    addWeekWord(word);
+                }
+            }
+        }
+        return getSetupModelForVocabulary(word, modelAndView);
+    }
+
+    @RequestMapping(value = "/word/edit")
+    public ModelAndView editWord(@ModelAttribute("word") Word word,
+                                 @RequestParam(value = "addAsWeekWord", required = false) Boolean setWordAsWeekWord,
+                                 BindingResult result) {
+        ModelAndView modelAndView = new ModelAndView(VOCABULARY);
+        if (isWordValid(word, result, modelAndView)) {
+            if (word.getId() > 0) {
+                boolean inProgressFlag = null != setWordAsWeekWord && setWordAsWeekWord;
+                word.setInProgress(inProgressFlag);
+                if (word.equals(wordService.getWordById(word.getId()))) {
+                    modelAndView.addObject(ERROR, String.format("Word %s already exist. No change was made.", word.getWord()));
+                } else if (word.isInProgress() ^ wordService.getWordById(word.getId()).isInProgress()) {
+                    if (word.isInProgress()) {
+                        addWeekWord(word);
+                    } else {
+                        weekWordService.removeWeekWord(weekWordService.getWeekWordByWordId(word.getId()).getId());
+                    }
+                }
+                wordService.updateWord(word);
+            }
+        }
+        return getSetupModelForVocabulary(word, modelAndView);
+    }
+
+    @RequestMapping("/word/remove/{id}")
+    public String removeWord(@PathVariable("id") String  idText) {
+        try {
+            int id = Integer.parseInt(idText);
+            AbstractWord weekWord = weekWordService.getWeekWordByWordId(id);
+            if (weekWord != null) {
+                weekWordService.removeWeekWord(weekWord.getId());
+            }
+            if (null!=wordService.getWordById(id)) {
+                wordService.removeWord(id);
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/vocabulary";
+    }
+
+    private void addWeekWord(Word word) {
+        final WeekWord weekWord = new WeekWord(word);
+        weekWord.setCurrentDate();
+        weekWordService.addWeekWord(weekWord);
+    }
+
+    private boolean isWordValid(Word word, BindingResult result, ModelAndView modelAndView) {
+        validator.validate(word, result);
+        if (result.hasErrors()) {
+            modelAndView.addObject(ERROR, "All fields are required");
+            return false;
+        }
+        return true;
+    }
+
+
 }

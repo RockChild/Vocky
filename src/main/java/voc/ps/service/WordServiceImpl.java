@@ -48,9 +48,9 @@ public class WordServiceImpl implements WordService {
 
     @Override
     @Transactional
-    public boolean doesWordExist(Word word) {
+    public boolean wordExist(Word word) {
         for (Word wordTemp : this.wordDAO.listWords()) {
-            if (wordTemp.equals(word))
+            if (wordTemp.getWord().equals(word.getWord()))
                 return true;
         }
         return false;

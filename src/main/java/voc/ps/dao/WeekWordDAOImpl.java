@@ -1,17 +1,18 @@
 package voc.ps.dao;
 
-import voc.ps.model.WeekWord;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import voc.ps.model.AbstractWord;
+import voc.ps.model.WeekWord;
 
 import java.util.List;
 
 /**
  * Created by pavlo.shtefanesku on 9/22/2016.
  */
-public class WeekWordDAOImpl implements WeekWordDAO {
+public class WeekWordDAOImpl implements TempWordDAO {
 
     private static final Logger logger = LoggerFactory.getLogger(WeekWordDAOImpl.class);
     private SessionFactory sessionFactory;
@@ -21,14 +22,14 @@ public class WeekWordDAOImpl implements WeekWordDAO {
     }
 
     @Override
-    public void addWeekWord(WeekWord weekWord) {
+    public void addWord(AbstractWord weekWord) {
         Session session = this.sessionFactory.getCurrentSession();
         session.persist(weekWord);
         logger.info("WeekWord saved successfully, WeekWord Details="+ weekWord);
     }
 
     @Override
-    public void updateWeekWord(WeekWord weekWord) {
+    public void updateWord(AbstractWord weekWord) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(weekWord);
         logger.info("WeekWord updated successfully, WeekWord Details="+ weekWord);
@@ -36,17 +37,17 @@ public class WeekWordDAOImpl implements WeekWordDAO {
 
     @SuppressWarnings("unchecked")
     @Override
-    public List<WeekWord> listWeekWords() {
+    public List<AbstractWord> listWords() {
         Session session = this.sessionFactory.getCurrentSession();
-        List<WeekWord> weekWordList = session.createQuery("from WeekWord").list();
-        for(WeekWord weekWord : weekWordList){
+        List<AbstractWord> weekWordList = session.createQuery("from WeekWord").list();
+        for(AbstractWord weekWord : weekWordList){
             logger.info("Word List::"+ weekWord);
         }
         return weekWordList;
     }
 
     @Override
-    public WeekWord getWeekWordById(int id) {
+    public WeekWord getWordById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         WeekWord weekWord = (WeekWord) session.load(WeekWord.class, id);
         logger.info("WeekWord loaded successfully, WeekWord details="+ weekWord);
@@ -54,7 +55,7 @@ public class WeekWordDAOImpl implements WeekWordDAO {
     }
 
     @Override
-    public void removeWeekWord(int id) {
+    public void deleteWord(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         WeekWord weekWord = (WeekWord) session.load(WeekWord.class, id);
         if(null != weekWord){

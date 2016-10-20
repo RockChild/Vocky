@@ -11,6 +11,6 @@ public interface WordService {
 	List<Word> listWords();
 	Word getWordById(int id);
 	void removeWord(int id);
-	boolean doesWordExist(Word word);
+	boolean wordExist(Word word);
 	
 }

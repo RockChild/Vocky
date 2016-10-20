@@ -2,5 +2,5 @@
 <%@ include file="menu.jsp" %>
 
 <script>
-        window.onload=setTimeout(correctMenu2('${openedPage}'), 3000);
+        window.onload=setTimeout(correctMenu('${openedPage}'), 3000);
 </script>

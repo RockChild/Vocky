@@ -1,8 +1,5 @@
 package voc.ps.model;
 
-import org.hibernate.annotations.Type;
-import org.joda.time.LocalDate;
-
 import javax.persistence.*;
 
 /**
@@ -22,18 +19,12 @@ public class Word {
 
     @Column(unique = true, nullable = false)
     private String word;
-
+    private String translation;
+    private String category;
+    private boolean inProgress;
+    private boolean learned;
     @OneToOne(mappedBy = "word")
     private WeekWord weekWord;
-
-    private String category;
-
-    private String translation;
-
-    @Type(type = "org.jadira.usertype.dateandtime.joda.PersistentLocalDate")
-    private LocalDate addedDate;
-
-
 
     public Word() {
     }
@@ -52,20 +43,11 @@ public class Word {
 
         Word word1 = (Word) o;
 
-        return word.equals(word1.word);
+        if (!getWord().equals(word1.getWord())) return false;
+        if (!getTranslation().equals(word1.getTranslation())) return false;
+        if (isInProgress()!=word1.isInProgress()) return false;
+        return getCategory().equals(word1.getCategory());
 
-    }
-
-    public LocalDate getAddedDate() {
-        return addedDate;
-    }
-
-    public void setAddedDate(LocalDate addedDate) {
-        this.addedDate = addedDate;
-    }
-
-    public void setCurrentDate() {
-        this.addedDate = new LocalDate();
     }
 
     public String getCategory() {
@@ -105,8 +87,25 @@ public class Word {
         return word.hashCode();
     }
 
+    public boolean isInProgress() {
+        return inProgress;
+    }
+
+    public void setInProgress(boolean inProgress) {
+        this.inProgress = inProgress;
+    }
+
+    public boolean isLearned() {
+        return learned;
+    }
+
+    public void setLearned(boolean learned) {
+        this.learned = learned;
+    }
+
     @Override
     public String toString() {
-        return "id=" + id + ", word=" + word + ", category=" + category + ", addedDate=" + addedDate;
+        return "id=" + id + ", word=" + word + ", category=" + category +
+                ", is in progress:" + inProgress + ", learned:" + learned;
     }
 }

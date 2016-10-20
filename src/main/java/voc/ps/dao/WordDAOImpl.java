@@ -1,5 +1,6 @@
 package voc.ps.dao;
 
+import org.hibernate.ObjectNotFoundException;
 import voc.ps.model.Word;
 import org.hibernate.Session;
 import org.hibernate.SessionFactory;
@@ -47,10 +48,16 @@ public class WordDAOImpl implements WordDAO {
 
 	@Override
 	public Word getWordById(int id) {
-		Session session = this.sessionFactory.getCurrentSession();		
-		Word p = (Word) session.load(Word.class, new Integer(id));
-		logger.info("Word loaded successfully, Word details="+p);
-		return p;
+		Session session = this.sessionFactory.getCurrentSession();
+		try {
+			Word p = (Word) session.load(Word.class, new Integer(id));
+			logger.info("Word loaded successfully, Word details=" + p);
+			return p;
+		} catch (ObjectNotFoundException e) {
+			logger.warn("Word couldn't be found by id [" + id + "]");
+		}
+		return null;
+
 	}
 
 	@Override

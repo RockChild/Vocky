@@ -1,6 +1,7 @@
 package voc.ps.service;
 
-import voc.ps.dao.WeekWordDAO;
+import voc.ps.dao.TempWordDAO;
+import voc.ps.model.AbstractWord;
 import voc.ps.model.WeekWord;
 import org.springframework.transaction.annotation.Transactional;
 
@@ -11,38 +12,49 @@ import java.util.List;
  */
 public class WeekWordServiceImpl implements WeekWordService {
 
-    private WeekWordDAO weekWordDAO;
+    private TempWordDAO tempWordDAO;
 
-    public void setWeekWordDAO(WeekWordDAO weekWordDAO) {
-        this.weekWordDAO = weekWordDAO;
+    public void setTempWordDAO(TempWordDAO tempWordDAO) {
+        this.tempWordDAO = tempWordDAO;
     }
     @Override
     @Transactional
     public void addWeekWord(WeekWord p) {
-        weekWordDAO.addWeekWord(p);
+        tempWordDAO.addWord(p);
     }
 
     @Override
     @Transactional
     public void updateWeekWord(WeekWord p) {
-        weekWordDAO.updateWeekWord(p);
+        tempWordDAO.updateWord(p);
     }
 
     @Override
     @Transactional
-    public List<WeekWord> listWeekWords() {
-        return weekWordDAO.listWeekWords();
+    public List<AbstractWord> listWeekWords() {
+        return tempWordDAO.listWords();
     }
 
     @Override
     @Transactional
-    public WeekWord getWeekWordById(int id) {
-        return weekWordDAO.getWeekWordById(id);
+    public AbstractWord getWeekWordById(int id) {
+        return tempWordDAO.getWordById(id);
     }
 
     @Override
     @Transactional
     public void removeWeekWord(int id) {
-        weekWordDAO.removeWeekWord(id);
+        tempWordDAO.deleteWord(id);
+    }
+
+    @Override
+    @Transactional
+    public AbstractWord getWeekWordByWordId(int id) {
+        for (AbstractWord weekWord:listWeekWords()) {
+            if (weekWord.getWord().getId() == id) {
+                return weekWord;
+            }
+        }
+        return null;
     }
 }

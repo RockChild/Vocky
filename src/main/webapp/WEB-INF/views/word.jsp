@@ -20,7 +20,7 @@
                 Add a Word
             </h1>
 
-            <c:url var="addAction" value="/word/add" ></c:url>
+            <c:url var="addAction" value="/word/addd" ></c:url>
 
             <form:form action="${addAction}" commandName="word">
                 <table>

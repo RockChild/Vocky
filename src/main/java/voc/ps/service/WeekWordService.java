@@ -1,5 +1,6 @@
 package voc.ps.service;
 
+import voc.ps.model.AbstractWord;
 import voc.ps.model.WeekWord;
 
 import java.util.List;
@@ -10,7 +11,8 @@ import java.util.List;
 public interface WeekWordService {
     void addWeekWord(WeekWord p);
     void updateWeekWord(WeekWord p);
-    List<WeekWord> listWeekWords();
-    WeekWord getWeekWordById(int id);
+    List<AbstractWord> listWeekWords();
+    AbstractWord getWeekWordById(int id);
     void removeWeekWord(int id);
+    AbstractWord getWeekWordByWordId(int id);
 }

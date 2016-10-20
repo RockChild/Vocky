@@ -61,11 +61,11 @@
         <beans:property name="wordDAO" ref="wordDAO"/>
 	</beans:bean>
 
-	<beans:bean id="weekWordDAO" class="voc.ps.dao.WeekWordDAOImpl">
+	<beans:bean id="tempWordDAO" class="voc.ps.dao.WeekWordDAOImpl">
 		<beans:property name="sessionFactory" ref="hibernate4AnnotatedSessionFactory" />
 	</beans:bean>
 	<beans:bean id="weekWordService" class="voc.ps.service.WeekWordServiceImpl">
-		<beans:property name="weekWordDAO" ref="weekWordDAO"/>
+		<beans:property name="tempWordDAO" ref="tempWordDAO"/>
 	</beans:bean>
 	<context:component-scan base-package="voc.ps" />
 	
