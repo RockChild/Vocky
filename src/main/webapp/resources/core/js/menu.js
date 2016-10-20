@@ -122,8 +122,32 @@ $('#openModalButton').click(function () {
     $('#submitModal').attr('value', 'Add word');
 });
 
-function deleteWord(id) {
+function deleteWord(id, option) {
     if(confirm("Are you sure you want to delete this word?")) {
-        document.location='/vocky/word/remove/' + id;
+        switch (option) {
+            case 'regular':
+                document.location='/vocky/word/remove/' + id;
+                break;
+            case 'week' :
+                document.location='/vocky/weekWord/remove/' + id;
+                break;
+            case 'month':
+                document.location='/vocky/monthWord/remove/' + id;
+                break;
+        }
+        return false
     }
 }
+
+function deleteWeekWord(id) {
+    deleteWord(id, 'week' );
+}
+
+function deleteMonthWord(id) {
+    deleteWord(id, 'month');
+}
+
+function deleteRegularWord(id) {
+    deleteWord(id, 'regular');
+}
+

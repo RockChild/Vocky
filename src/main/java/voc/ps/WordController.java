@@ -11,7 +11,7 @@ import voc.ps.model.WeekWord;
 import voc.ps.model.Word;
 
 @Controller
-public class WordController extends AbstractController{
+public class WordController extends AbstractController {
 
 
     @SuppressWarnings("SameReturnValue")
@@ -100,20 +100,56 @@ public class WordController extends AbstractController{
     }
 
     @RequestMapping("/word/remove/{id}")
-    public String removeWord(@PathVariable("id") String  idText) {
+    public String removeWord(@PathVariable("id") String idText) {
         try {
             int id = Integer.parseInt(idText);
-            AbstractWord weekWord = weekWordService.getWeekWordByWordId(id);
-            if (weekWord != null) {
-                weekWordService.removeWord(weekWord.getId());
+            AbstractWord tempWord = weekWordService.getWeekWordByWordId(id);
+            if (tempWord != null) {
+                weekWordService.removeWord(tempWord.getId());
             }
-            if (null!=wordService.getWordById(id)) {
+            tempWord = monthWordService.getMonthWordByWordId(id);
+            if (tempWord != null) {
+                monthWordService.removeWord(tempWord.getId());
+            }
+            if (null != wordService.getWordById(id)) {
                 wordService.removeWord(id);
             }
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
         return "redirect:/vocabulary";
+    }
+
+    @RequestMapping("/weekWord/remove/{id}")
+    public String removeWeekWord(@PathVariable("id") String idText) {
+        //TODO unset inProgress for Word
+        try {
+            int id = Integer.parseInt(idText);
+            AbstractWord weekWord = weekWordService.getWordById(id);
+            if (weekWord != null) {
+                wordService.getWordById(weekWord.getWord().getId()).setInProgress(false);
+                weekWordService.removeWord(weekWord.getId());
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/week";
+    }
+
+    @RequestMapping("/monthWord/remove/{id}")
+    public String removeMonthWord(@PathVariable("id") String idText) {
+        //TODO unset inProgress for Word
+        try {
+            int id = Integer.parseInt(idText);
+            MonthWord monthWord = monthWordService.getWordById(id);
+            if (monthWord != null) {
+                wordService.getWordById(monthWord.getWord().getId()).setInProgress(false);
+                monthWordService.removeWord(monthWord.getId());
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        }
+        return "redirect:/month";
     }
 
     private void addWeekWord(Word word) {

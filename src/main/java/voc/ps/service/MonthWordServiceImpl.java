@@ -4,6 +4,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import voc.ps.dao.MonthWordDAO;
 import voc.ps.model.AbstractWord;
+import voc.ps.model.MonthWord;
 
 import java.util.List;
 
@@ -21,13 +22,13 @@ public class MonthWordServiceImpl implements MonthWordService {
 
     @Override
     @Transactional
-    public void addWord(AbstractWord word) {
+    public void addWord(MonthWord word) {
         monthWordDAO.addWord(word);
     }
 
     @Override
     @Transactional
-    public void updateWord(AbstractWord word) {
+    public void updateWord(MonthWord word) {
         monthWordDAO.updateWord(word);
     }
 
@@ -39,7 +40,7 @@ public class MonthWordServiceImpl implements MonthWordService {
 
     @Override
     @Transactional
-    public AbstractWord getWordById(int id) {
+    public MonthWord getWordById(int id) {
         return monthWordDAO.getWordById(id);
     }
 

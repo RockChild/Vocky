@@ -21,7 +21,9 @@
     <body>
         <div id="wrapper">
             <div id="content" class="container jumbotron">
-                <h3>Word List</h3>
+                <div class="page-header">
+                    <h3>Words List</h3>
+                </div>
                 <c:if test="${!empty error}">
                     <div class="alert alert-danger  fade in">
                     <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
@@ -71,7 +73,7 @@
                                     </td>
                                     <td align="center">
                                         <span class="glyphicon glyphicon-pencil" onclick="openAndFill(event)" aria-hidden="true"></span>
-                                        <span class="glyphicon glyphicon-remove" onclick="deleteWord(${word.id})" aria-hidden="true"></span>
+                                        <span class="glyphicon glyphicon-remove" onclick="deleteRegularWord(${word.id})" aria-hidden="true"></span>
                                     </td>
                                 </tr>
                             </c:forEach>

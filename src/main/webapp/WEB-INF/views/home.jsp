@@ -1,5 +1,7 @@
 <%@ include file="pageTemplate.jsp" %>
 <%@ taglib prefix="c" uri="http://java.sun.com/jsp/jstl/core" %>
+<head>
+</head>
 <body>
     <div id="wrapper">
         <div id="content" class="jumbotron">
@@ -8,9 +10,6 @@
                 <h2>Hello, master!</h2>
                 <p>You just started your trip to Vocky. Vocky it&#39;s a easy to use and foolproof application
                 which can help you to gain you language level learning new vocabulary. You chose
-                    <script>
-                        document.writeln(getLanguageFromCookie());
-                    </script>
                 language - perfect! Now you can start.
                 </p>
                 <p><a class="btn btn-primary btn-lg" href="#" role="button">Learn more >> </a></p>

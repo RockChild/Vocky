@@ -22,14 +22,14 @@ public class MonthWordDAOImpl implements MonthWordDAO {
     }
 
     @Override
-    public void addWord(AbstractWord monthWord) {
+    public void addWord(MonthWord monthWord) {
         Session session = this.sessionFactory.getCurrentSession();
         session.persist(monthWord);
         logger.info("MonthWord saved successfully, MonthWord Details="+ monthWord);
     }
 
     @Override
-    public void updateWord(AbstractWord monthWord) {
+    public void updateWord(MonthWord monthWord) {
         Session session = this.sessionFactory.getCurrentSession();
         session.update(monthWord);
         logger.info("MonthWord updated successfully, MonthWord Details="+ monthWord);
@@ -47,7 +47,7 @@ public class MonthWordDAOImpl implements MonthWordDAO {
     }
 
     @Override
-    public AbstractWord getWordById(int id) {
+    public MonthWord getWordById(int id) {
         Session session = this.sessionFactory.getCurrentSession();
         MonthWord monthWord = (MonthWord) session.load(MonthWord.class, id);
         logger.info("MonthWord loaded successfully, MonthWord details="+ monthWord);

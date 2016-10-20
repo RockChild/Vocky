@@ -3,6 +3,9 @@
 <html>
     <head>
         <title>Vocky</title>
+        <script>
+            window.onload = hideMenuBar();
+        </script>
     </head>
 
     <body >

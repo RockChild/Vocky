@@ -18,6 +18,7 @@ public abstract class AbstractController {
     protected static final WordValidator validator = new WordValidator();
     protected static final String ERROR = "error";
     protected static final String VOCABULARY = "vocabulary";
+    protected static final String WORDS = "words";
     protected WeekWordService weekWordService;
     protected MonthWordService monthWordService;
     protected WordService wordService;

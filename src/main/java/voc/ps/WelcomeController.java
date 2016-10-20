@@ -6,20 +6,20 @@ import org.springframework.stereotype.Controller;
 import org.springframework.util.StringUtils;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.servlet.ModelAndView;
+import voc.ps.model.AbstractWord;
 import voc.ps.model.Word;
 import voc.ps.utils.ELanguages;
 
 import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 @Controller
-public class WelcomeController extends AbstractController{
-
-    private static final String OPTION_WEEK = "optionWeek";
+public class WelcomeController extends AbstractController {
 
     private static final String OPTION_CATEGORY = "optionCategory";
     private static final String OPTION_MONTH = "optionMonth";
-
+    private static final String OPTION_WEEK = "optionWeek";
     private final Logger logger = LoggerFactory.getLogger(WelcomeController.class);
 
 
@@ -30,7 +30,6 @@ public class WelcomeController extends AbstractController{
         modelAndView.addObject(OPENED_PAGE, OPTION_CATEGORY);
         return modelAndView;
     }
-
 
 
     @RequestMapping(value = "/vocabulary")
@@ -65,20 +64,10 @@ public class WelcomeController extends AbstractController{
 
     @RequestMapping(value = "/month")
     public ModelAndView monthWords() {
-        ModelAndView modelAndView = new ModelAndView("words");
 //        checkDatesForWeekWords();
-        modelAndView.addObject(OPENED_PAGE, OPTION_MONTH);
+        ModelAndView modelAndView = getWordsModelAndView(OPTION_MONTH, monthWordService.listWords());
         return modelAndView;
     }
-
-//    @RequestMapping(value = "/hello/{name:.+}", method = RequestMethod.GET)
-//    public ModelAndView hello(@PathVariable("name") String name) {
-//        logger.debug("hello() is executed");
-//        modelAndView.setViewName("index");
-//        modelAndView.addObject("title", "Greetings master");
-//        modelAndView.addObject("msg", "User");
-//        return modelAndView;
-//    }
 
     @RequestMapping(value = "test", method = RequestMethod.GET)
     @ResponseBody
@@ -89,13 +78,17 @@ public class WelcomeController extends AbstractController{
 
     @RequestMapping(value = "/week")
     public ModelAndView weekWords() {
-        ModelAndView modelAndView = new ModelAndView("words");
 //        checkDatesForWeekWords();
-        modelAndView.addObject(OPENED_PAGE, OPTION_WEEK);
-        modelAndView.addObject("listWords", weekWordService.listWords());
+        ModelAndView modelAndView = getWordsModelAndView(OPTION_WEEK, weekWordService.listWords());
         return modelAndView;
     }
 
+    private ModelAndView getWordsModelAndView(String optionMonth, List<AbstractWord> attributeValue) {
+        ModelAndView modelAndView = new ModelAndView(WORDS);
+        modelAndView.addObject(OPENED_PAGE, optionMonth);
+        modelAndView.addObject("listWords", attributeValue);
+        return modelAndView;
+    }
 
 
 //    private void checkDatesForWeekWords() {
