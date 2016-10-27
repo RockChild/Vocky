@@ -50,7 +50,7 @@ public class WeekWordServiceImpl implements WeekWordService {
 
     @Override
     @Transactional
-    public AbstractWord getWeekWordByWordId(int id) {
+    public AbstractWord getTempWordByWordId(int id) {
         for (AbstractWord weekWord: listWords()) {
             if (weekWord.getWord().getId() == id) {
                 return weekWord;

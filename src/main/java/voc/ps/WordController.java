@@ -1,62 +1,26 @@
 package voc.ps;
 
 import org.springframework.stereotype.Controller;
-import org.springframework.ui.Model;
 import org.springframework.validation.BindingResult;
-import org.springframework.web.bind.annotation.*;
+import org.springframework.web.bind.annotation.ModelAttribute;
+import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.RequestMapping;
+import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import voc.ps.model.AbstractWord;
 import voc.ps.model.MonthWord;
 import voc.ps.model.WeekWord;
 import voc.ps.model.Word;
+import voc.ps.service.SuperWordService;
 
 @Controller
 public class WordController extends AbstractController {
 
 
-    @SuppressWarnings("SameReturnValue")
-    @RequestMapping(value = "/words", method = RequestMethod.GET)
-    public String listWords(Model model) {
-        final Word word = wordService.listWords().get(0);
-        model.addAttribute("word", new Word());
-        model.addAttribute("listWords", this.wordService.listWords());
-        model.addAttribute("listWords", weekWordService.listWords());
-        return "word";
-    }
-
-    //For add and update word both
-    @RequestMapping(value = "/word/addd", method = RequestMethod.POST)
-    public String addWordOld(@ModelAttribute("word") Word p) {
-
-        if (p.getId() == 0) {
-            //new word, add it
-            this.wordService.addWord(p);
-        } else {
-            //existing word, call update
-            this.wordService.updateWord(p);
-        }
-
-        return "redirect:/words";
-
-    }
-
-    @RequestMapping("/edit/{id}")
-    public String editWordOld(@PathVariable("id") int id, Model model) {
-        model.addAttribute("word", wordService.getWordById(id));
-        model.addAttribute("listWords", wordService.listWords());
-        return "vocabulary";
-    }
-
-    @RequestMapping("/fucking/bullshit")
-    public ModelAndView fuck() {
-        ModelAndView modelAndView = new ModelAndView(VOCABULARY);
-        return modelAndView;
-    }
-
     @RequestMapping("/word/add")
-    public ModelAndView fuck(@ModelAttribute("word") Word word,
-                             @RequestParam(value = "addAsWeekWord", required = false) Boolean setWordAsWeekWord,
-                             BindingResult result) {
+    public ModelAndView addWord(@ModelAttribute("word") Word word,
+                                @RequestParam(value = "addAsWeekWord", required = false) Boolean setWordAsWeekWord,
+                                BindingResult result) {
 
         ModelAndView modelAndView = new ModelAndView(VOCABULARY);
         if (isWordValid(word, result, modelAndView)) {
@@ -72,7 +36,7 @@ public class WordController extends AbstractController {
                 }
             }
         }
-        return getSetupModelForVocabulary(word, modelAndView);
+        return addWordsIndexesToModel(getSetupModelForVocabulary(word, modelAndView));
     }
 
     @RequestMapping(value = "/word/edit")
@@ -90,24 +54,38 @@ public class WordController extends AbstractController {
                     if (word.isInProgress()) {
                         addWeekWord(word);
                     } else {
-                        weekWordService.removeWord(weekWordService.getWeekWordByWordId(word.getId()).getId());
+                        weekWordService.removeWord(weekWordService.getTempWordByWordId(word.getId()).getId());
                     }
                 }
                 wordService.updateWord(word);
             }
         }
-        return getSetupModelForVocabulary(word, modelAndView);
+        return addWordsIndexesToModel(getSetupModelForVocabulary(word, modelAndView));
+    }
+
+    @RequestMapping("/monthWord/remove/{id}")
+    public String removeMonthWord(@PathVariable("id") String idText) {
+        //TODO unset inProgress for Word
+        removeTempWord(idText, monthWordService);
+        return "redirect:/month";
+    }
+
+    @RequestMapping("/weekWord/remove/{id}")
+    public String removeWeekWord(@PathVariable("id") String idText) {
+        //TODO unset inProgress for Word
+        removeTempWord(idText, weekWordService);
+        return "redirect:/week";
     }
 
     @RequestMapping("/word/remove/{id}")
     public String removeWord(@PathVariable("id") String idText) {
         try {
             int id = Integer.parseInt(idText);
-            AbstractWord tempWord = weekWordService.getWeekWordByWordId(id);
+            AbstractWord tempWord = weekWordService.getTempWordByWordId(id);
             if (tempWord != null) {
                 weekWordService.removeWord(tempWord.getId());
             }
-            tempWord = monthWordService.getMonthWordByWordId(id);
+            tempWord = monthWordService.getTempWordByWordId(id);
             if (tempWord != null) {
                 monthWordService.removeWord(tempWord.getId());
             }
@@ -117,39 +95,8 @@ public class WordController extends AbstractController {
         } catch (NumberFormatException e) {
             e.printStackTrace();
         }
+        recalculateWordsCountForCheck();
         return "redirect:/vocabulary";
-    }
-
-    @RequestMapping("/weekWord/remove/{id}")
-    public String removeWeekWord(@PathVariable("id") String idText) {
-        //TODO unset inProgress for Word
-        try {
-            int id = Integer.parseInt(idText);
-            AbstractWord weekWord = weekWordService.getWordById(id);
-            if (weekWord != null) {
-                wordService.getWordById(weekWord.getWord().getId()).setInProgress(false);
-                weekWordService.removeWord(weekWord.getId());
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/week";
-    }
-
-    @RequestMapping("/monthWord/remove/{id}")
-    public String removeMonthWord(@PathVariable("id") String idText) {
-        //TODO unset inProgress for Word
-        try {
-            int id = Integer.parseInt(idText);
-            MonthWord monthWord = monthWordService.getWordById(id);
-            if (monthWord != null) {
-                wordService.getWordById(monthWord.getWord().getId()).setInProgress(false);
-                monthWordService.removeWord(monthWord.getId());
-            }
-        } catch (NumberFormatException e) {
-            e.printStackTrace();
-        }
-        return "redirect:/month";
     }
 
     private void addWeekWord(Word word) {
@@ -170,6 +117,23 @@ public class WordController extends AbstractController {
             return false;
         }
         return true;
+    }
+
+    private void removeTempWord(String idText, SuperWordService tempWordService) {
+        try {
+            int id = Integer.parseInt(idText);
+            AbstractWord abstractWord = tempWordService.getWordById(id);
+            if (abstractWord != null) {
+                final Word word = wordService.getWordById(abstractWord.getWord().getId());
+                word.setInProgress(false);
+                wordService.updateWord(word);
+                tempWordService.removeWord(abstractWord.getId());
+            }
+        } catch (NumberFormatException e) {
+            e.printStackTrace();
+        } finally {
+            recalculateWordsCountForCheck();
+        }
     }
 
 

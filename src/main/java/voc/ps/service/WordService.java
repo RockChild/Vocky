@@ -10,6 +10,7 @@ public interface WordService {
 	void updateWord(Word p);
 	List<Word> listWords();
 	Word getWordById(int id);
+	Word getWordByWord(String word);
 	void removeWord(int id);
 	boolean wordExist(Word word);
 	

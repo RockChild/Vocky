@@ -42,6 +42,12 @@ public class WordServiceImpl implements WordService {
 
     @Override
     @Transactional
+    public Word getWordByWord(String word) {
+        return this.wordDAO.getWordByWord(word);
+    }
+
+    @Override
+    @Transactional
     public void removeWord(int id) {
         this.wordDAO.removeWord(id);
     }

@@ -1,8 +1,18 @@
 function correctMenu(id) {
         setLangSuffix();
         setCorrectLinksToMenuOptions();
-    if (document.body.contains(document.getElementById(id))) {
-        activateMenuOption(id);
+        if (document.body.contains(document.getElementById(id))) {
+            activateMenuOption(id);
+        }
+    return false;
+}
+
+function setWordsIndexes(weekNum, monthNum) {
+    if(weekNum > 0) {
+        document.getElementById("weekSup").textContent = weekNum;
+    }
+    if(monthNum > 0) {
+        document.getElementById("monthSup").textContent = monthNum;
     }
     return false;
 }
@@ -21,23 +31,27 @@ function setCorrectLinksToMenuOptions() {
     document.getElementById("linkHome").setAttribute("href", "/vocky/home");
     document.getElementById("linkWeek").setAttribute("href", "/vocky/week");
     document.getElementById("linkMonth").setAttribute("href", "/vocky/month");
-    document.getElementById("linkCategory").setAttribute("href", "/vocky/category");
+    document.getElementById("linkCheck").setAttribute("href", "/vocky/checkList");
     document.getElementById("linkVocabulary").setAttribute("href", "/vocky/vocabulary");
 }
 
+function getCookieValue(key) {
+    var name = key + "=";
+        var ca = document.cookie.split(';');
+        for(var i = 0; i < ca.length; i++) {
+          var c = ca[i];
+          while (c.charAt(0) == ' ') {
+              c = c.substring(1);
+          }
+          if (c.indexOf(name) == 0) {
+              return c.substring(name.length, c.length);
+          }
+        }
+        return "";
+}
+
 function getLanguageFromCookie() {
-    var name = "language=";
-    var ca = document.cookie.split(';');
-    for(var i = 0; i < ca.length; i++) {
-      var c = ca[i];
-      while (c.charAt(0) == ' ') {
-          c = c.substring(1);
-      }
-      if (c.indexOf(name) == 0) {
-          return c.substring(name.length, c.length);
-      }
-    }
-    return "";
+    return getCookieValue('language');
 }
 
 function setLangSuffix() {
@@ -48,11 +62,12 @@ function setLangSuffix() {
     } else if (language == "Polish") {
         short = " PL";
     } else {
-        document.cookie.language = "English";
-        short= " EN";
+        window.location.href = '/vocky/logout';
+        return false;
     }
     document.getElementById('linkVocky').textContent += short;
 }
+
 function openAndFill(event) {
     var formFields = [];
     var $target = $(event.target);
@@ -60,11 +75,9 @@ function openAndFill(event) {
     $row.find('td').each(function (index, el) {
         var fieldValue = $(el).html();
         switch (index) {
-            case 0:
-                formFields['id'] = $(el).find('div:first').text();
-                break;
             case 1:
-                formFields['word'] = fieldValue;
+                formFields['id'] = $(el).find('div.divId').text();
+                formFields['word'] = $(el).find('div.divWord').text();
                 break;
             case 2:
                 formFields['translation'] = fieldValue;
@@ -149,5 +162,34 @@ function deleteMonthWord(id) {
 
 function deleteRegularWord(id) {
     deleteWord(id, 'regular');
+}
+
+function dataTable(tableId) {
+    var t = $('#' + tableId).DataTable( {
+         "columnDefs": [ {
+             "searchable": false,
+             "orderable": false,
+             "targets": 0
+         } ],
+         "order": [[ 1, 'asc' ]]
+     } );
+
+     t.on( 'order.dt search.dt', function () {
+         t.column(0, {search:'applied', order:'applied'}).nodes().each( function (cell, i) {
+             cell.innerHTML = i+1;
+         } );
+     } ).draw();
+}
+
+function deleteAllCookies() {
+    document.cookie.split(";").forEach(function(c) {
+        document.cookie = c.replace(/^ +/, "").replace(/=.*/, "=;expires=" + new Date().toUTCString() + ";path=/");
+    });
+}
+
+function setTranslationSelect(translation, event) {
+    document.getElementById('translationList').value = translation;
+    document.getElementById('submitCheckForm').disabled = false;
+    return false;
 }
 

@@ -9,7 +9,7 @@ import javax.persistence.*;
  * Created by pavlo.shtefanesku on 10/17/2016.
  */
 @MappedSuperclass
-public class AbstractWord {
+public abstract class AbstractWord {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private int id;
@@ -63,4 +63,7 @@ public class AbstractWord {
     public void setCurrentDate() {
         this.addedDate = new LocalDate();
     }
+
+    @Override
+    public abstract String toString();
 }

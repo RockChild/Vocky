@@ -10,5 +10,6 @@ public interface WordDAO {
 	void updateWord(Word p);
 	List<Word> listWords();
 	Word getWordById(int id);
+	Word getWordByWord(String wordValue);
 	void removeWord(int id);
 }

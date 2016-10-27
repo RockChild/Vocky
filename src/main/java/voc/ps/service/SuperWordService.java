@@ -7,8 +7,7 @@ import java.util.List;
 /**
  * Created by pavlo.shtefanesku on 10/20/2016.
  */
-public interface MonthWordService extends SuperWordService {
-
+public interface SuperWordService {
     void addWord(AbstractWord word);
 
     AbstractWord getTempWordByWordId(int id);

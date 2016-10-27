@@ -4,7 +4,10 @@
     <head>
         <title>Vocky</title>
         <script>
-            window.onload = hideMenuBar();
+            $(document).ready(function(){
+                hideMenuBar();
+                deleteAllCookies();
+            });
         </script>
     </head>
 

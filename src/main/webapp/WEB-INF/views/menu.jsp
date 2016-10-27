@@ -30,9 +30,15 @@
             <ul class="nav navbar-nav">
               <li id="optionHome"><a id="linkHome" >Home</a></li>
               <li id="optionVocabulary"><a id="linkVocabulary" >Vocabulary</a></li>
-              <li id="optionWeek"><a id="linkWeek" >Week words</a></li>
-              <li id="optionMonth"><a id="linkMonth" >Month words</a></li>
-              <li id="optionCategory"><a id="linkCategory" >Categories</a></li>
+              <li id="optionWeek"><a id="linkWeek" >
+                  Week words
+                  <sup id="weekSup"></sup>
+              </a></li>
+              <li id="optionMonth"><a id="linkMonth" >
+                  Month words
+                  <sup id="monthSup"></sup>
+              </a></li>
+              <li id="optionCheck"><a id="linkCheck" >Check</a></li>
             </ul>
             <ul class="nav navbar-nav navbar-right">
                 <%-- current date and time --%>

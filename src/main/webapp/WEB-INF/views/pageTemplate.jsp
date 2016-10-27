@@ -2,5 +2,8 @@
 <%@ include file="menu.jsp" %>
 
 <script>
-        window.onload=setTimeout(correctMenu('${openedPage}'), 3000);
+    window.onload = function() {
+        correctMenu('${openedPage}');
+        setWordsIndexes('${weekNum4Check}', '${monthNum4Check}');
+    };
 </script>
