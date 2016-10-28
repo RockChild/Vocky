@@ -8,7 +8,6 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RequestParam;
 import org.springframework.web.servlet.ModelAndView;
 import voc.ps.model.AbstractWord;
-import voc.ps.model.MonthWord;
 import voc.ps.model.WeekWord;
 import voc.ps.model.Word;
 import voc.ps.service.SuperWordService;
@@ -103,11 +102,6 @@ public class WordController extends AbstractController {
         final WeekWord weekWord = new WeekWord(word);
         weekWord.setCurrentDate();
         weekWordService.addWord(weekWord);
-
-        final MonthWord monthWord = new MonthWord(word);
-        monthWord.setCurrentDate();
-        monthWordService.addWord(monthWord);
-
     }
 
     private boolean isWordValid(Word word, BindingResult result, ModelAndView modelAndView) {

@@ -1,8 +1,13 @@
 package voc.ps.utils;
 
+import org.joda.time.LocalDate;
 import org.springframework.validation.Errors;
 import org.springframework.validation.Validator;
+import voc.ps.model.AbstractWord;
 import voc.ps.model.Word;
+
+import java.util.ArrayList;
+import java.util.List;
 
 /**
  * Created by pavlo.shtefanesku on 9/28/2016.
@@ -10,20 +15,18 @@ import voc.ps.model.Word;
 public class WordValidator implements Validator {
 
 
-//    public static List<WeekWord> checkWeekDates(Map<WeekWord, Word> weekWordToWordMap) {
-//        List<WeekWord> resultList = new ArrayList<WeekWord>();
-//        for(Map.Entry<WeekWord, Word> weekWordToWord : weekWordToWordMap.entrySet()) {
-//            final LocalDate addedDate = weekWordToWord.getValue().getAddedDate();
-//            if(null!=addedDate&&(!weekWordToWord.getKey().getShouldBeChecked())) {
-//                final LocalDate edgeDate = new LocalDate().minusDays(7);
-//                if (edgeDate.isAfter(addedDate) || edgeDate.equals(addedDate)) {
-//                    weekWordToWord.getKey().setShouldBeChecked(true);
-//                    resultList.add(weekWordToWord.getKey());
-//                }
-//            }
-//        }
-//        return resultList;
-//    }
+    public static List<AbstractWord> getTempWordsForUpdateAfterDateCheck(List<AbstractWord> tempWords, int daysForLearning) {
+        List<AbstractWord> resultList = new ArrayList<>();
+        final LocalDate todayDate = new LocalDate();
+        tempWords.stream().filter(weekWord -> !weekWord.getShouldBeChecked()).forEach(weekWord -> {
+            final LocalDate checkDate = weekWord.getAddedDate().plusDays(daysForLearning);
+            if (checkDate.isBefore(todayDate) || checkDate.equals(todayDate)) {
+                weekWord.setShouldBeChecked(true);
+                resultList.add(weekWord);
+            }
+        });
+        return resultList;
+    }
 
     @Override
     public boolean supports(Class<?> aClass) {

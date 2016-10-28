@@ -37,8 +37,8 @@
                 </div>
                 <c:if test="${!empty error}">
                     <div class="alert alert-danger  fade in">
-                    <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
-                    <strong>Warning!</strong> ${error}
+                        <a href="#" class="close" data-dismiss="alert" aria-label="close">&times;</a>
+                        <strong>Warning!</strong> ${error}
                     </div>
                 </c:if>
                 <c:if test="${!empty listWords}">

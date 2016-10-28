@@ -44,10 +44,12 @@
                             <div class="row">
                                 <div class="col-md-2"></div>
                                 <div class="col-md-3">
-                                    <div class="form-group">
-                                        <div id="wordDiv" class="well">${word4Check}</div>
-                                        <input style="display:none;" class="form-control" type="text" name="word" value="${word4Check}"/>
-                                    </div>
+                                    <c:if test="${!empty word4Check}">
+                                        <div class="form-group">
+                                            <div id="wordDiv" class="well">${word4Check}</div>
+                                            <input style="display:none;" class="form-control" type="text" name="word" value="${word4Check}"/>
+                                        </div>
+                                    </c:if>
                                 </div>
                                 <div class="col-md-7">
                                     <div class="form-group">
@@ -56,7 +58,7 @@
                                                 <li role="presentation"><a href="#" onclick="setTranslationSelect('${word}', event);">${word}</a></li>
                                             </c:forEach>
                                         </ul>
-                                        <select name="translationSelect" class="form-control" id="translationList">
+                                        <select name="translationSelect" class="form-control invisible" id="translationList">
                                              <c:forEach var="translation" items="${translationList}">
                                                  <option id="${translation}" name="translation">
                                                     ${translation}
@@ -66,16 +68,23 @@
                                     </div>
                                 </div>
                             </div>
+                            <c:if test="${!empty error}">
+                                <div class="alert alert-success">
+                                    <p>${error}</p>
+                                </div>
+                            </c:if>
                             <div class="form-group" align="center">
-                                <button type="submit" id="submitCheckForm"disabled="disabled" class="btn btn-success">Check</button>
-                                <c:choose>
-                                    <c:when test="${checking == 'weekWord'}">
-                                        <a href="/vocky/checkWeekWords" class="btn btn-warning" role="button">Skip</a>
-                                    </c:when>
-                                    <c:otherwise>
-                                        <a href="/vocky/checkMonthWords" class="btn btn-warning" role="button">Skip</a>
-                                    </c:otherwise>
-                                </c:choose>
+                                <c:if test="${!empty checking}">
+                                    <button type="submit" id="submitCheckForm"disabled="disabled" class="btn btn-success">Check</button>
+                                    <c:choose>
+                                        <c:when test="${checking == 'weekWord'}">
+                                            <a href="/vocky/checkWeekWords" class="btn btn-warning" role="button">Skip</a>
+                                        </c:when>
+                                        <c:otherwise>
+                                            <a href="/vocky/checkMonthWords" class="btn btn-warning" role="button">Skip</a>
+                                        </c:otherwise>
+                                    </c:choose>
+                                </c:if>
                                 <a href="/vocky/checkList" class="btn btn-danger" role="button">Finish</a>
                             </div>
                         </form>

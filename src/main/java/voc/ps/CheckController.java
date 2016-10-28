@@ -38,7 +38,9 @@ public class CheckController extends AbstractController {
                 final AbstractWord weekWord = weekWordService.getTempWordByWordId(word4Check.getId());
                 if (null!=weekWord) {
                     weekWordService.removeWord(weekWord.getId());
-                    monthWordService.addWord(new MonthWord(word4Check));
+                    final MonthWord monthWord = new MonthWord(word4Check);
+                    monthWord.setAddedDate(weekWord.getAddedDate());
+                    monthWordService.addWord(monthWord);
                 }
             }
         }
@@ -67,7 +69,10 @@ public class CheckController extends AbstractController {
     private ModelAndView getModelForCheckForm(List<AbstractWord> wordsForCheck, String checkFlag) {
         ModelAndView model = new ModelAndView("checkForm");
         model.addObject(OPENED_PAGE, OPTION_CHECK);
-        if (null != wordsForCheck && !wordsForCheck.isEmpty()) {
+        if (null == wordsForCheck || wordsForCheck.isEmpty()) {
+            model.addObject("error", "You learned all words.");
+            return addWordsIndexesToModel(model);
+        } else if (!wordsForCheck.isEmpty()) {
             Collections.shuffle(wordsForCheck);
             final Word word4Check = wordsForCheck.get(0).getWord();
             model.addObject("word4Check", word4Check.getWord());

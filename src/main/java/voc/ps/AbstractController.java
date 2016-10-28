@@ -1,5 +1,6 @@
 package voc.ps;
 
+import org.joda.time.DateTime;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Qualifier;
 import org.springframework.web.servlet.ModelAndView;
@@ -62,16 +63,16 @@ public abstract class AbstractController {
         return modelAndView;
     }
 
-    protected int getTempWordsForCheckNum(SuperWordService service) {
-        return getWordsForCheck(service).size();
-    }
-
     protected List<AbstractWord> getWordsForCheck(SuperWordService service) {
         return service.listWords().stream().filter(AbstractWord::getShouldBeChecked).collect(Collectors.toList());
     }
 
     protected void recalculateWordsCountForCheck() {
-        weekWordsForCheck = String.valueOf(getTempWordsForCheckNum(weekWordService));
-        monthWordsForCheck = String.valueOf(getTempWordsForCheckNum(monthWordService));
+        WordValidator.getTempWordsForUpdateAfterDateCheck(weekWordService.listWords(), 7).forEach(weekWordService::updateWord);
+        WordValidator.getTempWordsForUpdateAfterDateCheck(monthWordService.listWords(),
+                DateTime.now().dayOfMonth().getMaximumValue()).forEach(monthWordService::updateWord);
+
+        weekWordsForCheck = String.valueOf(getWordsForCheck(weekWordService).size());
+        monthWordsForCheck = String.valueOf(getWordsForCheck(monthWordService).size());
     }
 }

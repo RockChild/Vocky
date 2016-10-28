@@ -42,6 +42,11 @@
                             </div>
                         </div>
                     </c:if>
+                    <c:if test="${empty weekWordsList and empty monthWordsList}">
+                        <div class="alert alert-info">
+                           Sorry, but You don't have any words to check. Come back in a while.
+                        </div>
+                    </c:if>
                 </div>
             </div>
         <div id="footer" align="center" style="padding:20px">
