@@ -45,7 +45,7 @@ public class Word {
 
         if (!getWord().equals(word1.getWord())) return false;
         if (!getTranslation().equals(word1.getTranslation())) return false;
-        if (isInProgress()!=word1.isInProgress()) return false;
+        if (isInProgress() != word1.isInProgress()) return false;
         return getCategory().equals(word1.getCategory());
 
     }
@@ -84,7 +84,7 @@ public class Word {
 
     @Override
     public int hashCode() {
-        return word.hashCode();
+        return word.hashCode()*32 + getTranslation().hashCode()*13;
     }
 
     public boolean isInProgress() {

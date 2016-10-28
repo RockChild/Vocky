@@ -66,4 +66,7 @@ public abstract class AbstractWord {
 
     @Override
     public abstract String toString();
+
+    @Override
+    public abstract int hashCode();
 }

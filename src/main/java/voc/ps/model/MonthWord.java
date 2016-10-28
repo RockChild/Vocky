@@ -38,4 +38,15 @@ public class MonthWord extends AbstractWord {
                 ", shouldBeChecked=" + getShouldBeChecked() +
                 '}';
     }
+
+    @Override
+    public int hashCode() {
+        int hash = 13 * (this.getWord().getWord().isEmpty()?32:this.getWord().getWord().hashCode());
+        hash = hash + (null==this.getAddedDate()?13:getAddedDate().hashCode())*13;
+        hash = hash + getId()*13;
+        hash = hash + getShouldBeChecked().hashCode()*13;
+
+        return hash;
+    }
+
 }
